@@ -2,12 +2,20 @@ package dherls.login;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 public class Team {
 	
@@ -48,29 +56,35 @@ public class Team {
 	
 	public void addMember(String nameIn, String idIn){
 		members.add(new Member(nameIn,idIn,this, members.size()));
-	}
-
-	public void logIn(int position, String date) {
-		try {
-			System.out.println("h");
-			Member m = members.get(position);
-			logWriter = new BufferedWriter(new FileWriter(logFile,true));
-			logWriter.write("LOG_IN::" + date + "-" + m.getName() + "(" + m.getId() + ")");
-			logWriter.newLine();
-			System.out.println("h");
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally{
-			try {
-				logWriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
+		LogBook.addLog(LogBook.JOIN, members.get(members.size()-1));
 	}
 	
+	//removes the member from list 'members' and decreases the position of all members above the removed member
+	public void removeMember(Member m){
+		members.remove(m);
+		if (m.getIsLoggedIn()){
+			m.logOut();
+		}
+		LogBook.addLog(LogBook.LEAVE, m);
+		for (Member mem: members){
+			if (mem.getPosition()>m.getPosition()){
+				mem.memberRemoved();
+			}
+		}
+	}
+
+	public void logInMember(int position) {
+		Member m = members.get(position);
+		LogBook.addLog(LogBook.LOG_IN,m);
+	}
+	
+	public void logOutMember(int position) {
+		Member m = members.get(position);
+		LogBook.addLog(LogBook.LOG_OUT,m);
+	}
+	
+	
+
 	public void test(){
 		members.get(0).logIn();
 	}

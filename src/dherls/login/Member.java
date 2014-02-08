@@ -37,16 +37,24 @@ public class Member {
 	//When these two methods are called, the member logs itself into and out of the team respectively
 	public void logIn(){
 		isLoggedIn = true;
-		team.logIn(position,dateFormat.format(date));
+		team.logInMember(position);
 	}
 	
 	public void logOut(){
 		isLoggedIn = false;
+		team.logOutMember(position);
 	}
 	
 	public void print(){
 		System.out.println(name + "\t" + id + "\t" + isLoggedIn);
 	}
 	
+	public void memberRemoved(){
+		position--;
+	}
+	
+	public int getPosition(){
+		return position;
+	}
 	
 }
