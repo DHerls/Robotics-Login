@@ -1,5 +1,14 @@
 package dherls.visuals;
 
-public class MainFrame {
+import javax.swing.JFrame;
+
+public class MainFrame extends JFrame{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 
 }
