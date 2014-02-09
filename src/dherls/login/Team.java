@@ -2,6 +2,8 @@ package dherls.login;
 
 import java.util.ArrayList;
 
+import dherls.visuals.MessageFrame;
+
 public class Team {
 	
 	private ArrayList<Member> members = new ArrayList<>();	
@@ -18,11 +20,18 @@ public class Team {
 		
 	}
 	
-	public void addMember(String name, int id, boolean state){
-		members.add(new Member(name,id, members.size(), state));
-		LogBook.addLog(LogBook.JOIN, members.get(members.size()-1));
-		LogBook.addLog(LogBook.LOG_IN, members.get(members.size()-1));
-		MemberBook.addMember(name, id, state);
+	public boolean addMember(String name, int id, boolean state){
+		if (getMember(id)!=null){
+			new MessageFrame("The id " + id + " already exists");
+			return false;
+			
+		} else {
+			members.add(new Member(name,id, members.size(), state));
+			LogBook.addLog(LogBook.JOIN, members.get(members.size()-1));
+			LogBook.addLog(LogBook.LOG_IN, members.get(members.size()-1));
+			MemberBook.addMember(name, id, state);
+			return true;
+		}
 		
 	}
 	
@@ -61,6 +70,15 @@ public class Team {
 		for(Member m: members){
 			logOut(m);
 		}
+	}
+	
+	public Member getMember(int id){
+		for (Member m: members){
+			if (m.getId()==id){
+				return m;
+			}
+		}
+		return null;
 	}
 
 	public void test(){

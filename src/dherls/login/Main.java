@@ -1,15 +1,23 @@
 package dherls.login;
 
-public class Main {
-	public static Team team = new Team();
+import dherls.visuals.MainFrame;
 
-	
+public class Main {
+	private static Team team = new Team();
+	private static MainFrame frame;
 	
 	public static void main(String[] args){
 		LogBook.init();
 		MemberBook.init();
-		MemberBook.importMembers();
 		team.importMembers();
-		team.test();
+		frame = new MainFrame();
+	}
+	
+	public static Team getTeam(){
+		return team;
+	}
+	
+	public static MainFrame getFrame(){
+		return frame;
 	}
 }

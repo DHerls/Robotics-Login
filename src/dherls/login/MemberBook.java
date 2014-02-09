@@ -102,7 +102,7 @@ public class MemberBook {
 	public static ArrayList<Member> importMembers(){
 		ArrayList<Member> members = new ArrayList<>();
 		for (Row r: s){
-			if (r.getRowNum()>0){
+			if (r.getRowNum()>0 && r.getCell(0)!=null){
 				members.add(new Member(r.getCell(0).getStringCellValue().trim(), (int) r.getCell(1).getNumericCellValue() , members.size(),r.getCell(2).getStringCellValue().trim().equalsIgnoreCase("IN") ? true:false));
 			}
 			
