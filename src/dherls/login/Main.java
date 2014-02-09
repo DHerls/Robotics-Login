@@ -7,8 +7,9 @@ public class Main {
 	
 	public static void main(String[] args){
 		LogBook.init();
+		MemberBook.init();
+		MemberBook.importMembers();
 		team.importMembers();
-		team.printAll();
 		team.test();
 	}
 }

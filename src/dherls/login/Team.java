@@ -1,50 +1,14 @@
 package dherls.login;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 public class Team {
 	
-	private ArrayList<Member> members = new ArrayList<>();
-	private BufferedWriter logWriter;
-	private File logFile = new File("log.txt");
+	private ArrayList<Member> members = new ArrayList<>();	
 	
-	/*Imports all members from members.txt
-	 * file should be set up as followed:
-	 * name1
-	 * id1
-	 * name2
-	 * id2
-	*/
 	public void importMembers(){
-		try {
-			
-			Scanner fileScanner = new Scanner(new File("members.txt"));
-			while (fileScanner.hasNext()){
-				try{
-					members.add(new Member(fileScanner.nextLine(),fileScanner.nextLine(),this, members.size()));
-				} catch(NoSuchElementException e){
-					//TODO Add stuff if an id is not found
-				}
-			}
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		members = MemberBook.importMembers();
+		System.out.println("Successfully imported " + members.size() + " members.");
 	}
 
 	public void printAll() {
@@ -54,18 +18,22 @@ public class Team {
 		
 	}
 	
-	public void addMember(String nameIn, String idIn){
-		members.add(new Member(nameIn,idIn,this, members.size()));
+	public void addMember(String name, int id, boolean state){
+		members.add(new Member(name,id, members.size(), state));
 		LogBook.addLog(LogBook.JOIN, members.get(members.size()-1));
+		LogBook.addLog(LogBook.LOG_IN, members.get(members.size()-1));
+		MemberBook.addMember(name, id, state);
+		
 	}
 	
 	//removes the member from list 'members' and decreases the position of all members above the removed member
 	public void removeMember(Member m){
 		members.remove(m);
 		if (m.getIsLoggedIn()){
-			m.logOut();
+			logOut(m);
 		}
 		LogBook.addLog(LogBook.LEAVE, m);
+		MemberBook.removeMember(m);
 		for (Member mem: members){
 			if (mem.getPosition()>m.getPosition()){
 				mem.memberRemoved();
@@ -73,19 +41,29 @@ public class Team {
 		}
 	}
 
-	public void logInMember(int position) {
-		Member m = members.get(position);
-		LogBook.addLog(LogBook.LOG_IN,m);
+	public void logIn(Member m) {
+		if (!m.getIsLoggedIn()){
+			m.logIn();
+			LogBook.addLog(LogBook.LOG_IN,m);
+			MemberBook.stateChange(m);
+		}
 	}
 	
-	public void logOutMember(int position) {
-		Member m = members.get(position);
-		LogBook.addLog(LogBook.LOG_OUT,m);
+	public void logOut(Member m) {
+		if (m.getIsLoggedIn()){
+			m.logOut();
+			LogBook.addLog(LogBook.LOG_OUT,m);
+			MemberBook.stateChange(m);
+		}
 	}
 	
-	
+	public void logOutAll() {
+		for(Member m: members){
+			logOut(m);
+		}
+	}
 
 	public void test(){
-		members.get(0).logIn();
+		
 	}
 }

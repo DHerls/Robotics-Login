@@ -3,7 +3,7 @@ package dherls.login;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class LogBook {
@@ -24,18 +23,23 @@ public class LogBook {
 	public static int JOIN = 3;
 	public static int LEAVE = 4;
 	
-	private static Workbook wb;
+	private static HSSFWorkbook wb;
 	private static Sheet s;
 	
 	private static CellStyle logStyle;
+	
+	private static DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+	private static Date date = new Date();
 	
 	public static void init(){
 		FileInputStream getLogBook = null;
 		try {
 			getLogBook = new FileInputStream("log.xls");
-			wb = WorkbookFactory.create(getLogBook);
+			wb = (HSSFWorkbook) WorkbookFactory.create(getLogBook);
 			s = wb.getSheetAt(0);
+			System.out.println("Log Book found, import complete.");
 		} catch (FileNotFoundException e) {
+			System.out.println("Log Book not found, creating one.");
 			setUpLogBook();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -55,13 +59,14 @@ public class LogBook {
 	}
 	
 	private static void setUpLogBook() {
+		@SuppressWarnings("unused")
 		FileOutputStream fileOut = null;
-		try {
-			
+		
 			wb = new HSSFWorkbook();
 			wb.createSheet("Logs");
 			s = wb.getSheetAt(0);
 			Row r = s.createRow(0);
+			s.createFreezePane( 0, 1, 0, 1 );
 			Cell c = r.createCell(0);
 			CellStyle style = wb.createCellStyle();
 			style.setAlignment(CellStyle.ALIGN_CENTER);
@@ -89,19 +94,9 @@ public class LogBook {
 			c.setCellValue("ID");
 			c.setCellStyle(style);
 			
-			fileOut = new FileOutputStream("log.xls");
-			wb.write(fileOut);
-		    fileOut.close();;
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		} finally {
-			try {
-				fileOut.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+			write();
+			System.out.println("Log Book created.");
+
 		
 	}
 
@@ -116,11 +111,10 @@ public class LogBook {
 		Row r = s.createRow(s.getLastRowNum()+1);
 		Cell c = r.createCell(0);
 		
-		colorFont.setFontHeightInPoints((short) 12);
-		colorFont.setFontName("Times New Roman");
 		style.setAlignment(CellStyle.ALIGN_CENTER);
-		blackFont.setFontHeightInPoints((short) 12);
-		blackFont.setFontName("Times New Roman");
+		style.setBorderBottom(CellStyle.BORDER_THIN);
+		style.setBorderRight(CellStyle.BORDER_THIN);
+		style.setBorderLeft(CellStyle.BORDER_THIN);
 		blackFont.setColor(HSSFColor.BLACK.index);
 		
 		switch (action){
@@ -129,24 +123,31 @@ public class LogBook {
 			style.setFont(colorFont);
 			c.setCellValue("LOG_IN");
 			c.setCellStyle(style);
+			System.out.println("[LOG-IN] " + dateFormat.format(date) + "-" + m.getName() + "(" + m.getId() +")");
 			break;
 		case 2:
-			colorFont.setColor(HSSFColor.BLACK.index);
+			colorFont.setColor(HSSFColor.LAVENDER.index);
 			style.setFont(colorFont);
 			c.setCellValue("LOG_OUT");
 			c.setCellStyle(style);
+			System.out.println("[LOG-OUT] " + dateFormat.format(date) + "-" + m.getName() + "(" + m.getId() +")");
+
 			break;
 		case 3:
 			colorFont.setColor(HSSFColor.GREEN.index);
 			style.setFont(colorFont);
 			c.setCellValue("JOIN");
 			c.setCellStyle(style);
+			System.out.println("[JOIN] " + dateFormat.format(date) + "-" + m.getName() + "(" + m.getId() +")");
+
 			break;
 		case 4:
 			colorFont.setColor(HSSFColor.RED.index);
 			style.setFont(colorFont);
 			c.setCellValue("LEAVE");
 			c.setCellStyle(style);
+			System.out.println("[LEAVE] " + dateFormat.format(date) + "-" + m.getName() + "(" + m.getId() +")");
+
 			break;
 		}
 			
@@ -156,7 +157,7 @@ public class LogBook {
 		logStyle.setFont(blackFont);
 		
 		cell = r.createCell(1);
-		cell.setCellValue(new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").format(new Date()));
+		cell.setCellValue(dateFormat.format(date));
 		cell.setCellStyle(logStyle);
 		
 		cell = r.createCell(2);
@@ -167,6 +168,16 @@ public class LogBook {
 		cell.setCellValue(m.getId());
 		cell.setCellStyle(logStyle);
 		
+		for (int i = 0; i< 4;i++){
+			s.autoSizeColumn(i);
+		}
+		
+		write();
+		
+		
+	}
+	
+	private static void write(){
 		FileOutputStream fileOut = null;
 		try {
 			fileOut = new FileOutputStream("log.xls");
@@ -176,14 +187,9 @@ public class LogBook {
 		} finally{
 			try {
 				fileOut.close();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-			
-		
-		
-		
-		
 	}
 }

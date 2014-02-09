@@ -1,32 +1,32 @@
 package dherls.login;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Member {
 	
 	private String name;
-	private String id;
+	private int id;
 	private boolean isLoggedIn = false;
-	private Team team;
-	private DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-	private Date date = new Date();
 	//This variable tells the member what position he is in in his team's member list
 	private int position;
 	
-	public Member(String name, String id, Team team, int position){
-		this.team = team;
+	public Member(String name, int id, int position){
 		this.name = name;
 		this.id = id;
 		this.position = position;
+	}
+	
+	public Member(String name, int id, int position, boolean isLoggedIn){
+		this.name = name;
+		this.id = id;
+		this.position = position;
+		this.isLoggedIn = isLoggedIn;
 	}
 	
 	public String getName(){
 		return name;
 	}
 	
-	public String getId(){
+	public int getId(){
 		return id;
 	}
 	
@@ -34,15 +34,12 @@ public class Member {
 		return isLoggedIn;
 	}
 	
-	//When these two methods are called, the member logs itself into and out of the team respectively
 	public void logIn(){
 		isLoggedIn = true;
-		team.logInMember(position);
 	}
 	
 	public void logOut(){
 		isLoggedIn = false;
-		team.logOutMember(position);
 	}
 	
 	public void print(){
@@ -56,5 +53,6 @@ public class Member {
 	public int getPosition(){
 		return position;
 	}
+	
 	
 }
