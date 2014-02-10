@@ -150,7 +150,9 @@ public class LogBook {
 
 			break;
 		}
-			
+		
+		Main.getFrame().checkLoggedIn();
+		
 		Cell cell;
 		
 		

@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -26,16 +27,17 @@ public class IDLoginPanel extends JPanel implements ActionListener {
 	
 	public IDLoginPanel(){
 		setLayout(new GridBagLayout());
-		this.setPreferredSize(new Dimension(124,86));
+		this.setPreferredSize(new Dimension(124,110));
 		UIManager.put("Button.defaultButtonFollowsFocus", Boolean.TRUE);
 		addContent();
 	}
 	
 	private void addContent() {
 		c.insets = new Insets(10,5,10,5);
-		c.gridy = 0;
-		add(idBox,c);
+		add(new JLabel("Member ID:"));
 		c.gridy = 1;
+		add(idBox,c);
+		c.gridy = 2;
 		add(logInButton,c);
 		
 		idBox.setHorizontalAlignment(JTextField.CENTER);

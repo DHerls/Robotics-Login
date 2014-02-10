@@ -24,6 +24,7 @@ public class MessageFrame extends JFrame implements ActionListener {
 		c.gridy = 1;
 		add(okButton,c);
 		okButton.addActionListener(this);
+		setResizable(false);
 		setVisible(true);
 	}
 	

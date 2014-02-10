@@ -80,8 +80,30 @@ public class Team {
 		}
 		return null;
 	}
+	
+	public Member getMemberAt(int position){
+		return members.get(position);
+	}
+	
+	public void toggleState(Member m){
+		if (m.getIsLoggedIn()){
+			logOut(m);
+		} else {
+			logIn(m);
+		}
+	}
 
 	public void test(){
 		
+	}
+
+	public ArrayList<Member> getLoggedIn() {
+		ArrayList<Member> loggedIn = new ArrayList<>();
+		for (Member m: members){
+			if (m.getIsLoggedIn()){
+				loggedIn.add(m);
+			}
+		}
+		return loggedIn;
 	}
 }
