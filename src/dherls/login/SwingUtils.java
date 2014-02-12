@@ -50,7 +50,7 @@ public final class SwingUtils {
          Class<T> clazz, Container container) {
       return getDescendantsOfType(clazz, container, true);
    }
-
+   
    /**
     * Convenience method for searching below <code>container</code> in the
     * component hierarchy and return nested components that are instances of

@@ -1,9 +1,9 @@
 package dherls.login;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import dherls.visuals.MainFrame;
+import dherls.visuals.MessageFrame;
 
 public class Main {
 	private static Team team = new Team();
@@ -21,7 +21,9 @@ public class Main {
 				
 			}
 		} else {
-			FileHandler.delete();
+			//FileHandler.delete();
+			
+			FileHandler.readFile();
 		}
 		LogBook.init();
 		MemberBook.init();
