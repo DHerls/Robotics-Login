@@ -1,5 +1,6 @@
 package dherls.login;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,6 +16,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import dherls.visuals.MessageFrame;
+
 public class MemberBook {
 	
 	private static Workbook wb;
@@ -23,11 +26,12 @@ public class MemberBook {
 	public static void init(){
 		FileInputStream fs = null;
 		try {
-			fs = new FileInputStream("members.xls");
+			fs = new FileInputStream(FileHandler.getDir().getAbsolutePath() + File.separator + "members.xls");
 			System.out.println("Member Book found.");
 
 		} catch (FileNotFoundException e) {
 			System.out.println("Member Book not found, creating one.");
+			setUpMemberBook();
 		} finally{
 			try {
 				fs.close();
@@ -42,6 +46,7 @@ public class MemberBook {
 		write();
 		importWorkbook();
 	}
+
 
 	private static void setUpMemberBook() {
 			
@@ -84,10 +89,13 @@ public class MemberBook {
 	private static void write(){
 		FileOutputStream fileOut = null;
 		try {
-			fileOut = new FileOutputStream("members.xls");
+			fileOut = new FileOutputStream(FileHandler.getDir().getAbsolutePath() + File.separator + "members.xls");
 			wb.write(fileOut);
 		    fileOut.close();;
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			new MessageFrame("ERROR: Close members.xls and restart the program");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			try {
@@ -114,7 +122,7 @@ public class MemberBook {
 	private static void importWorkbook(){
 		FileInputStream getLogBook = null;
 		try {
-			getLogBook = new FileInputStream("members.xls");
+			getLogBook = new FileInputStream(FileHandler.getDir().getAbsolutePath() + File.separator + "members.xls");
 			wb = WorkbookFactory.create(getLogBook);
 			s = wb.getSheetAt(0);
 			
@@ -139,9 +147,46 @@ public class MemberBook {
 		importWorkbook();
 	}
 	
-	public static void addMember(String name, int id, boolean state){
-		Row r = s.createRow(s.getLastRowNum()+1);
+	public static void addMember(Member m){
+		Row r = s.createRow(m.getPosition()+1);
 		Cell c = r.createCell(0);
+		CellStyle style = wb.createCellStyle();
+		style.setAlignment(CellStyle.ALIGN_CENTER);
+		style.setBorderBottom(CellStyle.BORDER_THIN);
+		style.setBorderRight(CellStyle.BORDER_THIN);
+		style.setBorderLeft(CellStyle.BORDER_THIN);
+		
+		c.setCellValue(m.getName());
+		c.setCellStyle(style);
+		
+		c = r.createCell(1);
+		c.setCellValue(m.getId());
+		c.setCellStyle(style);
+		
+		c = r.createCell(2);
+		c.setCellValue(m.getIsLoggedIn() ?  "IN" : "OUT" );
+		c.setCellStyle(style);
+		
+		write();
+		importWorkbook();
+	}
+
+	public static void removeMember(Member m) {
+		m.print();
+		System.out.println(s.getLastRowNum());
+		s.removeRow(s.getRow(m.getPosition()+1));
+		if (m.getPosition()+2<=s.getLastRowNum()){
+			
+			
+			s.shiftRows(m.getPosition()+2, s.getLastRowNum(), -1);
+		}
+		write();
+		importWorkbook();
+	}
+
+	public static void replaceMember(Member oldMember, String name, int id, boolean state) {
+		Row r = s.getRow(oldMember.getPosition()+1);
+		Cell c = r.getCell(0);
 		CellStyle style = wb.createCellStyle();
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		style.setBorderBottom(CellStyle.BORDER_THIN);
@@ -151,21 +196,14 @@ public class MemberBook {
 		c.setCellValue(name);
 		c.setCellStyle(style);
 		
-		c = r.createCell(1);
+		c = r.getCell(1);
 		c.setCellValue(id);
 		c.setCellStyle(style);
 		
-		c = r.createCell(2);
+		c = r.getCell(2);
 		c.setCellValue(state ?  "IN" : "OUT" );
 		c.setCellStyle(style);
 		
-		write();
-		importWorkbook();
-	}
-
-	public static void removeMember(Member m) {
-		s.removeRow(s.getRow(m.getPosition()+1));
-		s.shiftRows(m.getPosition()+2, s.getLastRowNum(), -1);
 		write();
 		importWorkbook();
 	}

@@ -1,5 +1,6 @@
 package dherls.login;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,12 +30,11 @@ public class LogBook {
 	private static CellStyle logStyle;
 	
 	private static DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
-	private static Date date = new Date();
 	
 	public static void init(){
 		FileInputStream getLogBook = null;
 		try {
-			getLogBook = new FileInputStream("log.xls");
+			getLogBook = new FileInputStream(FileHandler.getDir().getAbsolutePath() + File.separator + "log.xls");
 			wb = (HSSFWorkbook) WorkbookFactory.create(getLogBook);
 			s = wb.getSheetAt(0);
 			System.out.println("Log Book found, import complete.");
@@ -123,14 +123,14 @@ public class LogBook {
 			style.setFont(colorFont);
 			c.setCellValue("LOG_IN");
 			c.setCellStyle(style);
-			System.out.println("[LOG-IN] " + dateFormat.format(date) + "-" + m.getName() + "(" + m.getId() +")");
+			System.out.println("[LOG-IN] " + dateFormat.format(new Date()) + "-" + m.getName() + "(" + m.getId() +")");
 			break;
 		case 2:
 			colorFont.setColor(HSSFColor.LAVENDER.index);
 			style.setFont(colorFont);
 			c.setCellValue("LOG_OUT");
 			c.setCellStyle(style);
-			System.out.println("[LOG-OUT] " + dateFormat.format(date) + "-" + m.getName() + "(" + m.getId() +")");
+			System.out.println("[LOG-OUT] " + dateFormat.format(new Date()) + "-" + m.getName() + "(" + m.getId() +")");
 
 			break;
 		case 3:
@@ -138,7 +138,7 @@ public class LogBook {
 			style.setFont(colorFont);
 			c.setCellValue("JOIN");
 			c.setCellStyle(style);
-			System.out.println("[JOIN] " + dateFormat.format(date) + "-" + m.getName() + "(" + m.getId() +")");
+			System.out.println("[JOIN] " + dateFormat.format(new Date()) + "-" + m.getName() + "(" + m.getId() +")");
 
 			break;
 		case 4:
@@ -146,12 +146,12 @@ public class LogBook {
 			style.setFont(colorFont);
 			c.setCellValue("LEAVE");
 			c.setCellStyle(style);
-			System.out.println("[LEAVE] " + dateFormat.format(date) + "-" + m.getName() + "(" + m.getId() +")");
+			System.out.println("[LEAVE] " + dateFormat.format(new Date()) + "-" + m.getName() + "(" + m.getId() +")");
 
 			break;
 		}
 		
-		Main.getFrame().checkLoggedIn();
+		//Main.getFrame().checkLoggedIn();
 		
 		Cell cell;
 		
@@ -159,7 +159,7 @@ public class LogBook {
 		logStyle.setFont(blackFont);
 		
 		cell = r.createCell(1);
-		cell.setCellValue(dateFormat.format(date));
+		cell.setCellValue(dateFormat.format(new Date()));
 		cell.setCellStyle(logStyle);
 		
 		cell = r.createCell(2);
@@ -182,7 +182,7 @@ public class LogBook {
 	private static void write(){
 		FileOutputStream fileOut = null;
 		try {
-			fileOut = new FileOutputStream("log.xls");
+			fileOut = new FileOutputStream(FileHandler.getDir().getAbsolutePath() + File.separator + "log.xls");
 			wb.write(fileOut);
 		} catch (Exception e) {
 			e.printStackTrace();

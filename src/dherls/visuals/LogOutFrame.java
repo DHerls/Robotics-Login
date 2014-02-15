@@ -28,6 +28,7 @@ public class LogOutFrame extends JFrame implements ActionListener {
 		setSize(300,150);
 		setResizable(false);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLayout(new GridBagLayout());
 		setTitle("Log Out?");
 		String s = "<html> Member " + m.getName() + "(" + m.getId() + ") is already logged in. Would you like to log them out? </html>";
@@ -64,10 +65,10 @@ public class LogOutFrame extends JFrame implements ActionListener {
 		if (e.getSource().equals(logOutButton)){
 			Main.getTeam().logOut(m);
 			Main.getFrame().getLoginPanel().reset();
-			setVisible(false);
+			this.dispose();
 		} else {
 			Main.getFrame().getLoginPanel().retry();
-			setVisible(false);
+			this.dispose();
 		}
 		
 	}

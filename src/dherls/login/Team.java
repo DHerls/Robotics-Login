@@ -1,5 +1,7 @@
 package dherls.login;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import dherls.visuals.MessageFrame;
@@ -28,16 +30,22 @@ public class Team {
 		} else {
 			members.add(new Member(name,id, members.size(), state));
 			LogBook.addLog(LogBook.JOIN, members.get(members.size()-1));
-			LogBook.addLog(LogBook.LOG_IN, members.get(members.size()-1));
-			MemberBook.addMember(name, id, state);
+			if (state){
+				LogBook.addLog(LogBook.LOG_IN, members.get(members.size()-1));
+			}
+
+			MemberBook.addMember(getLatestMember());
+			Main.getFrame().updateMembers();
 			return true;
 		}
 		
+
 	}
 	
 	//removes the member from list 'members' and decreases the position of all members above the removed member
 	public void removeMember(Member m){
 		members.remove(m);
+		FileHandler.removePicture(m);
 		if (m.getIsLoggedIn()){
 			logOut(m);
 		}
@@ -48,6 +56,8 @@ public class Team {
 				mem.memberRemoved();
 			}
 		}
+		
+		Main.getFrame().updateMembers();
 	}
 
 	public void logIn(Member m) {
@@ -70,6 +80,7 @@ public class Team {
 		for(Member m: members){
 			logOut(m);
 		}
+		Main.getFrame().updateMembers();
 	}
 	
 	public Member getMember(int id){
@@ -105,5 +116,46 @@ public class Team {
 			}
 		}
 		return loggedIn;
+	}
+	
+	public ArrayList<Member> getMembers(){
+		return members;
+	}
+
+	public boolean replaceMember(Member oldMember, String name, int id) {
+		boolean state = oldMember.getIsLoggedIn();
+		Member m = getMember(id);
+		if (m!=null){
+			if (m.equals(oldMember)){
+				members.set(oldMember.getPosition(),new Member(name,id, oldMember.getPosition(), state));
+				//LogBook.addLog(LogBook.JOIN, members.get(members.size()-1));
+				//if (state){
+					//LogBook.addLog(LogBook.LOG_IN, members.get(members.size()-1));
+				//}
+
+				//MemberBook.addMember(name, id, state);
+				MemberBook.replaceMember(oldMember,name, id, state);
+				Main.getFrame().updateMembers();
+				return true;
+			}
+			new MessageFrame("The id " + id + " already exists");
+			return false;
+			
+		} else {
+			
+			members.set(oldMember.getPosition(),new Member(name,id, oldMember.getPosition(), state));
+			//LogBook.addLog(LogBook.JOIN, members.get(members.size()-1));
+			//if (state){
+				//LogBook.addLog(LogBook.LOG_IN, members.get(members.size()-1));
+			//}
+
+			MemberBook.replaceMember(oldMember,name, id, state);
+			Main.getFrame().updateMembers();
+			return true;
+		}
+	}
+
+	public Member getLatestMember() {
+		return members.get(members.size()-1);
 	}
 }

@@ -16,7 +16,7 @@ public class ExtraButtonsPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JButton logOutButton = new JButton("Log Out All");
 	private JButton viewLogsButton = new JButton("View Log");
-	private JButton viewMembersButton = new JButton("View Member List");
+	private JButton addMemberButton = new JButton("Add Member");
 	private GridBagConstraints c = new GridBagConstraints();
 	
 	public ExtraButtonsPanel(){
@@ -27,15 +27,15 @@ public class ExtraButtonsPanel extends JPanel implements ActionListener {
 	private void addContent(){
 		c.insets = new Insets(5,5,5,5);
 		add(logOutButton,c);
-		c.gridy++;
-		c.gridy++;
+		c.gridx++;
+		c.gridx++;
 		add(viewLogsButton,c);
-		c.gridy++;
-		add(viewMembersButton,c);
+		c.gridx++;
+		add(addMemberButton,c);
 		
 		logOutButton.addActionListener(this);
 		viewLogsButton.addActionListener(this);
-		viewMembersButton.addActionListener(this);
+		addMemberButton.addActionListener(this);
 
 		
 	}
@@ -48,7 +48,7 @@ public class ExtraButtonsPanel extends JPanel implements ActionListener {
 		} else if (e.getSource().equals(viewLogsButton)){
 			//TODO view Logs button.
 		} else {
-			//TODO view members button.
+			new AddMemberFrame();
 		}
 	}
 

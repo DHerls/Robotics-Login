@@ -28,6 +28,7 @@ public class RemoveMemberFrame extends JFrame implements ActionListener {
 		setSize(300,150);
 		setResizable(false);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLayout(new GridBagLayout());
 		setTitle("Log Out?");
 		String s = "<html> Are you sure you want to delete " + m.getName() + "(" + m.getId() + ")? </html>";
@@ -63,9 +64,9 @@ public class RemoveMemberFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(removeButton)){
 			Main.getTeam().removeMember(m);
-			setVisible(false);
+			this.dispose();
 		} else {
-			setVisible(false);
+			this.dispose();
 		}
 		
 	}

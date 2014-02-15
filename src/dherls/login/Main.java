@@ -1,34 +1,33 @@
 package dherls.login;
 
+import java.awt.FlowLayout;
+
+import javax.swing.JFrame;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import dherls.visuals.MainFrame;
-import dherls.visuals.MessageFrame;
+import dherls.visuals.MemberPicturePanel;
+import dherls.visuals.SelectDirectoryFrame;
 
 public class Main {
 	private static Team team = new Team();
 	private static MainFrame frame;
 	
 	public static void main(String[] args){
-
 		if (!FileHandler.doesTempFileExist()){
 			try{
 				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-				FileHandler.createTempFile();
-				FileHandler.getUserDirPref();
-				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+				new SelectDirectoryFrame();
 			} catch (Exception e){
 				
 			}
-		} else {
-			//FileHandler.delete();
-			
+		} else {			
 			FileHandler.readFile();
+			execute();
 		}
-		LogBook.init();
-		MemberBook.init();
-		team.importMembers();
-		frame = new MainFrame();
+
+		
 	}
 
 	public static Team getTeam(){
@@ -37,5 +36,17 @@ public class Main {
 	
 	public static MainFrame getFrame(){
 		return frame;
+	}
+	
+	public static void execute(){
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+		}
+		LogBook.init();
+		MemberBook.init();
+		team.importMembers();
+		frame = new MainFrame();
 	}
 }

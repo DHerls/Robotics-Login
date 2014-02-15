@@ -19,6 +19,7 @@ public class MessageFrame extends JFrame implements ActionListener {
 		setTitle("Message");
 		setLayout(new GridBagLayout());
 		setSize(300,100);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		add(new JLabel(s),c);
 		c.gridy = 1;
@@ -30,7 +31,7 @@ public class MessageFrame extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		setVisible(false);
+		this.dispose();
 	}
 
 }
