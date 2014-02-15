@@ -4,7 +4,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -31,7 +34,13 @@ public class MainFrame extends JFrame{
 		add(new ExtraButtonsPanel(),c);
 		addPictureContent();
 		//new AddMemberFrame(12121);
-		
+		try {
+			BufferedImage img = ImageIO.read(getClass().getResource("/dherls/resources/icon.png"));
+			setIconImage(img);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setSize(800,800);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -65,6 +74,7 @@ public class MainFrame extends JFrame{
 		add(scroll,c);
 	}
 
+	@SuppressWarnings("unused")
 	private void addTextContent() {
 		c.gridwidth =1;
 		c.anchor = GridBagConstraints.EAST;

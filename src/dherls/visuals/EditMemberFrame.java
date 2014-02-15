@@ -20,6 +20,10 @@ import dherls.login.Main;
 import dherls.login.Member;
 
 public class EditMemberFrame extends JFrame implements ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Member oldMember;
 	private GridBagConstraints c = new GridBagConstraints();
 	private JTextField nameBox = new JTextField(15);

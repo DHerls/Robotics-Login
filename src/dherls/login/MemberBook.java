@@ -87,6 +87,9 @@ public class MemberBook {
 	}
 	
 	private static void write(){
+		for (int i = 0; i<3; i++){
+			s.autoSizeColumn(i);
+		}
 		FileOutputStream fileOut = null;
 		try {
 			fileOut = new FileOutputStream(FileHandler.getDir().getAbsolutePath() + File.separator + "members.xls");

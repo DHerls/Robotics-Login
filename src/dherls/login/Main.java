@@ -1,13 +1,9 @@
 package dherls.login;
 
-import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import dherls.visuals.MainFrame;
-import dherls.visuals.MemberPicturePanel;
 import dherls.visuals.SelectDirectoryFrame;
 
 public class Main {

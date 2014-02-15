@@ -13,6 +13,10 @@ import dherls.login.Main;
 import dherls.login.Member;
 
 public class MemberPicturePanel extends JPanel implements ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private MemberPictureButton button;
 	private Member member;
 	private GridBagConstraints c = new GridBagConstraints();
