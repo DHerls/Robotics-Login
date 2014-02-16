@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -47,7 +48,7 @@ public class MainFrame extends JFrame{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		setSize(810,840);
+		setSize(810,(int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*3/4));
 		setLocationRelativeTo(null);
 		infoPanel.setText("This is a test of the info panel");
 	}
@@ -61,7 +62,6 @@ public class MainFrame extends JFrame{
 			pictures.add(new MemberPicturePanel(m),c);
 			
 			c.gridx+=2;
-			System.out.println(c.gridx);
 			if (c.gridx == 8){
 				c.gridx = 0;
 				c.gridy ++;
@@ -70,7 +70,7 @@ public class MainFrame extends JFrame{
 		}
 		
 		scroll = new JScrollPane(pictures);
-		scroll.setPreferredSize(new Dimension(700,700));
+		scroll.setPreferredSize(new Dimension(700,getHeight()-150));
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		c.gridx =0;
 		c.gridy = 2;
@@ -126,6 +126,11 @@ public class MainFrame extends JFrame{
 	public void visualize() {
 		updateMembers();
 		setVisible(true);
+		System.out.println(getHeight());
+		System.out.println(scroll.getHeight());
+		System.out.println(loginPanel.getHeight());
+		System.out.println(infoPanel.getHeight());
+		
 	}
 
 }
