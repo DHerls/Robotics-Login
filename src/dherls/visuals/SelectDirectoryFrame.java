@@ -37,7 +37,7 @@ public class SelectDirectoryFrame extends JFrame implements ActionListener, Wind
 		setLayout(new GridBagLayout());
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addContent();
-		setSize(400,100);
+		setSize(400,120);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
