@@ -94,8 +94,8 @@ public class SelectDirectoryFrame extends JFrame implements ActionListener, Wind
 				
 			}
 		} else if (e.getSource().equals(okButton)){
-			File f = new File(fileLocationBox.getText());
-			if (f.exists() && f.isDirectory()){
+			File f = new File(fileLocationBox.getText().trim());
+			if ((f.exists() && f.isDirectory())|| f.getAbsolutePath().equals(FileHandler.getDefaultDir().getAbsolutePath())){
 				FileHandler.setDir(f);
 				System.out.println("Default directory set at " + f.getAbsolutePath());
 				this.dispose();
