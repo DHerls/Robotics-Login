@@ -14,6 +14,13 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * This class is used to handle all of the information related to the working directory.
+ * 
+ * @author Dan Herlihy
+ *
+ */
+
 public class FileHandler {
 	
 	private static File temp = new File(System.getProperty("java.io.tmpdir") + "robolog.txt");
@@ -21,11 +28,17 @@ public class FileHandler {
 	private static File defaultDir = new File(System.getProperty("user.home") + File.separator + "Login" + File.separator);
 	private static File pictureDir;
 
-	
+	/**
+	 * 
+	 * 
+	 * @return Whether or not the text file containing the working directory path exists
+	 */
 	public static boolean doesTempFileExist() {		
 		return temp.exists();
 	}
-
+	/**
+	 * Creates a 'temporary' file called "robolog.txt" which stores the user's working directory preference
+	 */
 	public static void createTempFile() {
 		try {
 			temp.createNewFile();
@@ -34,7 +47,12 @@ public class FileHandler {
 		}
 		
 	}
-
+	
+	/**
+	 * Creates a JFileChooser window which allows the user to select their preferred working directory
+	 * 
+	 * @return The folder which the user has selected or null if they have not selected a folder
+	 */
 	public static File getUserDirPref() {
 		JFileChooser fc = new JFileChooser();
 		defaultDir.mkdirs();
@@ -58,7 +76,10 @@ public class FileHandler {
 	public static void delete() {
 		temp.delete();
 	}
-
+	
+	/**
+	 * Reads the temp file containing user directory preferences and initializes the main directory file and the picture directory file.
+	 */
 	public static void readFile() {
 		Scanner scan = null;
 		try {
@@ -76,7 +97,11 @@ public class FileHandler {
 	public static File getDefaultDir(){
 		return defaultDir;
 	}
-	
+	/**
+	 * Writes the path of the preferred working directory to the temp file
+	 * 
+	 * @param f The user preferred working directory
+	 */
 	public static void setDir(File f){
 		if (!f.equals(defaultDir)){
 			defaultDir.delete();
@@ -102,11 +127,19 @@ public class FileHandler {
 			}
 		}
 	}
-	
+	/**
+	 * 
+	 * @return The work directory
+	 */
 	public static File getDir(){
 		return dir;
 	}
 	
+	/**
+	 * Creates a JFileChooser window which allows the user to select members' pictures
+	 * 
+	 * @return The file which the user has selected or null if no selection has been made
+	 */
 	public static File getMemberPic() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -138,7 +171,13 @@ public class FileHandler {
 		}
 
 	}
-
+	/**
+	 * Takes the source image file selected by the user and converts it to a .png file with the member's id as a file name. It also places the file in the pictures directory/
+	 * 
+	 * @param sourceFile The original picture file
+	 * @param id The id of the member whose picture this is
+	 * @throws IOException
+	 */
 	public static void copyPic(File sourceFile,int id) throws IOException {
 		if (sourceFile!=null){
 			RenderedImage r = ImageIO.read(sourceFile);
@@ -147,12 +186,22 @@ public class FileHandler {
 		}
 	}
 	
+	/**
+	 * Typically called when a member is deleted, it deletes the member's picture from the picture directory
+	 * 
+	 * @param m The member whose picture is to be deleted
+	 */
 	public static void removePicture(Member m){
 		new File(pictureDir.getAbsolutePath() + File.separator + String.valueOf(m.getId()) + ".png").delete();
 	}
-
+	
+	/**
+	 * 
+	 * @return The picture directory
+	 */
 	public static File getPictureDir() {
 		return pictureDir;
 	}
+	
 	
 }

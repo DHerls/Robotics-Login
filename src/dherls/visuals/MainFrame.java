@@ -23,6 +23,7 @@ public class MainFrame extends JFrame{
 	private IDLoginPanel loginPanel = new IDLoginPanel();
 	private JScrollPane loggedInPanel = new MemberDisplayContainer().getDisplay(Main.getTeam().getLoggedIn());
 	private JScrollPane scroll;
+	private InfoPanel infoPanel = new InfoPanel();
 	
 	public MainFrame(){
 		setLayout(new GridBagLayout());
@@ -31,20 +32,24 @@ public class MainFrame extends JFrame{
 		
 		//addTextContent();
 		c.gridy = 0;
+		c.gridwidth = 2;
+		add(infoPanel,c);
+		c.gridy = 1;
+		c.gridwidth = 1;
 		add(new ExtraButtonsPanel(),c);
+		c.gridx = 1;
+		add(loginPanel,c);
 		addPictureContent();
 		//new AddMemberFrame(12121);
 		try {
 			BufferedImage img = ImageIO.read(getClass().getResource("/dherls/resources/icon.png"));
 			setIconImage(img);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		setSize(800,800);
+		setSize(810,840);
 		setLocationRelativeTo(null);
-		setVisible(true);
-		
+		infoPanel.setText("This is a test of the info panel");
 	}
 
 	private void addPictureContent() {
@@ -55,8 +60,9 @@ public class MainFrame extends JFrame{
 		for (Member m:Main.getTeam().getMembers()){
 			pictures.add(new MemberPicturePanel(m),c);
 			
-			c.gridx++;
-			if (c.gridx == 4){
+			c.gridx+=2;
+			System.out.println(c.gridx);
+			if (c.gridx == 8){
 				c.gridx = 0;
 				c.gridy ++;
 				c.gridy++;
@@ -67,9 +73,9 @@ public class MainFrame extends JFrame{
 		scroll.setPreferredSize(new Dimension(700,700));
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		c.gridx =0;
-		c.gridy = 1;
+		c.gridy = 2;
 		c.gridheight = 1;
-		c.gridwidth = 1;
+		c.gridwidth = 2;
 		c.insets = new Insets(0,0,0,0);
 		add(scroll,c);
 	}
@@ -105,11 +111,21 @@ public class MainFrame extends JFrame{
 	public void updateMembers() {
 		int position = scroll.getVerticalScrollBar().getValue();
 		remove(scroll);
+		scroll = null;
 		addPictureContent();
 		scroll.getVerticalScrollBar().setValue(position);
 		repaint();
 		revalidate();
 		
+	}
+	
+	public InfoPanel getInfoPanel(){
+		return infoPanel;
+	}
+
+	public void visualize() {
+		updateMembers();
+		setVisible(true);
 	}
 
 }

@@ -21,9 +21,11 @@ public class LogOutFrame extends JFrame implements ActionListener {
 	private JButton logOutButton = new JButton("Log Out");
 	private JButton cancelButton = new JButton("Cancel");
 	private GridBagConstraints c = new GridBagConstraints();
+	private boolean logOutAll = false;
 	private Member m;
 	
 	public LogOutFrame(Member m){
+		logOutAll = false;
 		this.m = m;
 		setSize(300,150);
 		setResizable(false);
@@ -39,6 +41,21 @@ public class LogOutFrame extends JFrame implements ActionListener {
 	}
 	
 	
+	public LogOutFrame() {
+		logOutAll = true;
+		setSize(300,150);
+		setResizable(false);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setLayout(new GridBagLayout());
+		setTitle("Log Out?");
+		String s = "Are you sure you want to log out all members?";
+		addContent(s);
+		UIManager.put("Button.defaultButtonFollowsFocus", Boolean.TRUE);
+		setVisible(true);
+	}
+
+
 	private void addContent(String s) {
 		c.insets = new Insets(10,10,10,10);
 		c.gridy = 0;
@@ -62,13 +79,24 @@ public class LogOutFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(logOutButton)){
-			Main.getTeam().logOut(m);
-			Main.getFrame().getLoginPanel().reset();
-			this.dispose();
+		if (!logOutAll){
+			if (e.getSource().equals(logOutButton)){
+				Main.getTeam().logOut(m);
+				Main.getFrame().getLoginPanel().reset();
+				Main.getFrame().updateMembers();
+				this.dispose();
+			} else {
+				Main.getFrame().getLoginPanel().retry();
+				this.dispose();
+			}
 		} else {
-			Main.getFrame().getLoginPanel().retry();
-			this.dispose();
+			if (e.getSource().equals(logOutButton)){
+				Main.getTeam().logOutAll();
+				this.dispose();
+			} else {
+				Main.getFrame().getLoginPanel().retry();
+				this.dispose();
+			}
 		}
 		
 	}

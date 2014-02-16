@@ -35,8 +35,11 @@ public class MemberPicturePanel extends JPanel implements ActionListener{
 		button.addActionListener(this);
 		menu = new PictureOptionsMenu(member,button);
 		button.setComponentPopupMenu(menu);
+		c.insets = new Insets(0,0,0,0);
 		c.gridy = 1;
-		add(new JLabel(member.getName() + " (" + member.getId() + ")"),c);
+		add(new JLabel(member.getName()),c);
+		c.gridy = 2;
+		add(new JLabel( "(" + member.getId() + ")"),c);
 	}
 
 	@Override

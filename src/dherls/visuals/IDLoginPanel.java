@@ -1,6 +1,5 @@
 package dherls.visuals;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -27,17 +26,18 @@ public class IDLoginPanel extends JPanel implements ActionListener {
 	
 	public IDLoginPanel(){
 		setLayout(new GridBagLayout());
-		this.setPreferredSize(new Dimension(124,110));
 		UIManager.put("Button.defaultButtonFollowsFocus", Boolean.TRUE);
 		addContent();
 	}
 	
 	private void addContent() {
-		c.insets = new Insets(10,5,10,5);
-		add(new JLabel("Member ID:"));
+		c.insets = new Insets(5,5,5,5);
+		c.gridwidth = 2;
+		add(new JLabel("Member ID:"),c);
+		c.gridwidth = 1;
 		c.gridy = 1;
 		add(idBox,c);
-		c.gridy = 2;
+		c.gridx = 1;
 		add(logInButton,c);
 		
 		idBox.setHorizontalAlignment(JTextField.CENTER);
@@ -53,8 +53,9 @@ public class IDLoginPanel extends JPanel implements ActionListener {
 			if (m!=null){
 				if (!m.getIsLoggedIn()){
 					Main.getTeam().logIn(m);
+					Main.getFrame().updateMembers();
 					reset();
-				} else if (m.getIsLoggedIn()){
+				} else {
 				new LogOutFrame(m);
 				} 
 			}else {

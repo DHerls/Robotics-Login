@@ -1,5 +1,6 @@
 package dherls.login;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,9 +17,13 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-
+/**
+ * Used to create and manage the Excel file which stores all of the logs, "log.xls"
+ * 
+ * @author Dan Herlihy
+ *
+ */
 public class LogBook {
-	
 	public static int LOG_IN = 1;
 	public static int LOG_OUT = 2;
 	public static int JOIN = 3;
@@ -31,6 +36,10 @@ public class LogBook {
 	
 	private static DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
 	
+	/**
+	 * Basic set up for the log book. It checks if the log book exists in the working directory. If it does, it initializes the workbook and the sheet.
+	 * If it doesn't, it calls the set up log book method
+	 */
 	public static void init(){
 		FileInputStream getLogBook = null;
 		try {
@@ -99,7 +108,12 @@ public class LogBook {
 
 		
 	}
-
+	/**
+	 * Adds a log to the log book relating to the member specified.
+	 * 
+	 * @param action Takes the static values LOG_IN, LOG_OUT, JOIN, LEAVE
+	 * @param m The member who is performing the action
+	 */
 	public static void addLog(int action, Member m) {
 		/*
 		 * Two different fonts and styles were set up in order to have a different first cell color.
@@ -124,6 +138,7 @@ public class LogBook {
 			c.setCellValue("LOG_IN");
 			c.setCellStyle(style);
 			System.out.println("[LOG-IN] " + dateFormat.format(new Date()) + "-" + m.getName() + "(" + m.getId() +")");
+			Main.getFrame().getInfoPanel().setText(m.getName() + " (" + m.getId() +") logged in on " + dateFormat.format(new Date()) + ".");
 			break;
 		case 2:
 			colorFont.setColor(HSSFColor.LAVENDER.index);
@@ -131,7 +146,7 @@ public class LogBook {
 			c.setCellValue("LOG_OUT");
 			c.setCellStyle(style);
 			System.out.println("[LOG-OUT] " + dateFormat.format(new Date()) + "-" + m.getName() + "(" + m.getId() +")");
-
+			Main.getFrame().getInfoPanel().setText(m.getName() + " (" + m.getId() +") logged out on " + dateFormat.format(new Date()) + ".");
 			break;
 		case 3:
 			colorFont.setColor(HSSFColor.GREEN.index);
@@ -139,6 +154,7 @@ public class LogBook {
 			c.setCellValue("JOIN");
 			c.setCellStyle(style);
 			System.out.println("[JOIN] " + dateFormat.format(new Date()) + "-" + m.getName() + "(" + m.getId() +")");
+			Main.getFrame().getInfoPanel().setText(m.getName() + " (" + m.getId() +") joined the team on " + dateFormat.format(new Date()) + ".");
 
 			break;
 		case 4:
@@ -147,6 +163,7 @@ public class LogBook {
 			c.setCellValue("LEAVE");
 			c.setCellStyle(style);
 			System.out.println("[LEAVE] " + dateFormat.format(new Date()) + "-" + m.getName() + "(" + m.getId() +")");
+			Main.getFrame().getInfoPanel().setText(m.getName() + " (" + m.getId() +") left the team on " + dateFormat.format(new Date()) + ".");
 
 			break;
 		}
@@ -189,6 +206,31 @@ public class LogBook {
 		} finally{
 			try {
 				fileOut.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Copies the log book to a temporary file which it then opens.  This allows the program to open the log book without having to wait for it to close.
+	 * It is a lazy solution. 
+	 */
+	public static void openTemp(){
+		FileOutputStream fileOut = null;
+		File temp = null;
+		try {
+			temp = File.createTempFile("log", ".xls");
+			temp.deleteOnExit();
+			fileOut = new FileOutputStream(temp);
+			wb.write(fileOut);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				fileOut.close();
+				Desktop dt = Desktop.getDesktop();
+				dt.open(temp);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

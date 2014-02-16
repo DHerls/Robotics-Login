@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import dherls.login.Main;
+import dherls.login.LogBook;
 
 public class ExtraButtonsPanel extends JPanel implements ActionListener {
 
@@ -44,9 +44,10 @@ public class ExtraButtonsPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(logOutButton)){
-			Main.getTeam().logOutAll();
+			new LogOutFrame();
+			
 		} else if (e.getSource().equals(viewLogsButton)){
-			//TODO view Logs button.
+			LogBook.openTemp();
 		} else {
 			new AddMemberFrame();
 		}

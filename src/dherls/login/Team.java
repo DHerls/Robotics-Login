@@ -11,6 +11,7 @@ public class Team {
 	public void importMembers(){
 		members = MemberBook.importMembers();
 		System.out.println("Successfully imported " + members.size() + " members.");
+		Main.getFrame().getInfoPanel().setText("The team currently has " + members.size() + " members.");
 	}
 
 	public void printAll() {
@@ -34,6 +35,7 @@ public class Team {
 
 			MemberBook.addMember(getLatestMember());
 			Main.getFrame().updateMembers();
+			Main.getFrame().getLoginPanel().reset();
 			return true;
 		}
 		
@@ -63,6 +65,7 @@ public class Team {
 			m.logIn();
 			LogBook.addLog(LogBook.LOG_IN,m);
 			MemberBook.stateChange(m);
+			Main.getFrame().getLoginPanel().reset();
 		}
 	}
 	
@@ -71,14 +74,21 @@ public class Team {
 			m.logOut();
 			LogBook.addLog(LogBook.LOG_OUT,m);
 			MemberBook.stateChange(m);
+			Main.getFrame().getLoginPanel().reset();
 		}
 	}
 	
 	public void logOutAll() {
 		for(Member m: members){
-			logOut(m);
+			if (m.getIsLoggedIn()){
+				m.logOut();
+				LogBook.addLog(LogBook.LOG_OUT,m);
+				MemberBook.stateChange(m);
+			}
 		}
 		Main.getFrame().updateMembers();
+		Main.getFrame().getLoginPanel().reset();
+		Main.getFrame().getInfoPanel().setText("All members logged out.");
 	}
 	
 	public Member getMember(int id){

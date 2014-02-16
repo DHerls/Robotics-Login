@@ -17,7 +17,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import dherls.visuals.MessageFrame;
-
+/**
+ * Handles everything related to the member list Excel document
+ * 
+ * @author Dan Herlihy
+ *
+ */
 public class MemberBook {
 	
 	private static Workbook wb;
@@ -98,7 +103,6 @@ public class MemberBook {
 		} catch (FileNotFoundException e) {
 			new MessageFrame("ERROR: Close members.xls and restart the program");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			try {
@@ -175,8 +179,6 @@ public class MemberBook {
 	}
 
 	public static void removeMember(Member m) {
-		m.print();
-		System.out.println(s.getLastRowNum());
 		s.removeRow(s.getRow(m.getPosition()+1));
 		if (m.getPosition()+2<=s.getLastRowNum()){
 			

@@ -164,6 +164,7 @@ public class AddMemberFrame extends JFrame implements ActionListener {
 						try {
 							FileHandler.copyPic(picture,  Integer.parseInt(idBox.getText().trim()));
 							Main.getTeam().getLatestMember().loadPicture();
+							Main.getFrame().updateMembers();
 						} catch (IOException ex) {
 							// TODO Auto-generated catch block
 							ex.printStackTrace();

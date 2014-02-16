@@ -56,6 +56,8 @@ public class EditMemberFrame extends JFrame implements ActionListener{
 		imagePathBox.setDisabledTextColor(Color.black);
 		if (picture!=null){
 			imagePathBox.setText(picture.getAbsolutePath());
+		} else {
+			imagePathBox.setText("Default");
 		}
 		
 		nameBox.setText(oldMember.getName());
@@ -108,8 +110,10 @@ public class EditMemberFrame extends JFrame implements ActionListener{
 					if (Main.getTeam().replaceMember(oldMember, nameBox.getText(), Integer.parseInt(idBox.getText().trim()))){
 						
 						try {
-							FileHandler.copyPic(picture,  Integer.parseInt(idBox.getText().trim()));
-							Main.getTeam().getLatestMember().loadPicture();
+							if (!imagePathBox.getText().equals("Default")){
+								FileHandler.copyPic(picture,  Integer.parseInt(idBox.getText().trim()));
+								Main.getTeam().getLatestMember().loadPicture();
+							}
 							Main.getFrame().updateMembers();
 						} catch (IOException ex) {
 							// TODO Auto-generated catch block
