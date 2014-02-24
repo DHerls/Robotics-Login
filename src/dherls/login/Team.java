@@ -7,6 +7,7 @@ import dherls.visuals.MessageFrame;
 public class Team {
 	
 	private ArrayList<Member> members = new ArrayList<>();	
+	private ArrayList<String> groups;
 	
 	public void importMembers(){
 		members = MemberBook.importMembers();
@@ -165,5 +166,9 @@ public class Team {
 
 	public Member getLatestMember() {
 		return members.get(members.size()-1);
+	}
+	
+	public void importGroups(){
+		groups  = FileHandler.getGroups();
 	}
 }

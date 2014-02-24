@@ -3,6 +3,8 @@ package dherls.login;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
@@ -29,6 +31,7 @@ public class Member {
 	private int position;
 	private File pictureFile;
 	private BufferedImage image;
+	private ArrayList<String> groups;
 	
 	/**
 	 * Initializer for Member
@@ -37,10 +40,11 @@ public class Member {
 	 * @param id The member's id
 	 * @param position The members position relative to other members in the Team's member list
 	 */
-	public Member(String name, int id, int position){
+	public Member(String name, int id, int position, boolean state){
 		this.name = name;
 		this.id = id;
 		this.position = position;
+		this.isLoggedIn = state;
 		loadPicture();
 	}
 	
@@ -51,13 +55,26 @@ public class Member {
 	 * @param id The member's id
 	 * @param position The members position relative to other members in the Team's member list
 	 * @param isLoggedIn Whether or not the member should be initially logged in
+	 * @param groups 
 	 */
-	public Member(String name, int id, int position, boolean isLoggedIn){
+	public Member(String name, int id, int position, boolean isLoggedIn, String groups){
 		this.name = name;
 		this.id = id;
 		this.position = position;
 		this.isLoggedIn = isLoggedIn;
 		loadPicture();
+		parseGroups(groups);
+		
+	}
+	
+	public Member(String name, int id, int position, boolean isLoggedIn, ArrayList<String> groups){
+		this.name = name;
+		this.id = id;
+		this.position = position;
+		this.isLoggedIn = isLoggedIn;
+		this.groups = groups;
+		loadPicture();
+		
 		
 	}
 	
@@ -170,6 +187,26 @@ public class Member {
 	 */
 	public File getPictureFile() {
 		return pictureFile;
+	}
+	
+	public void joinGroup(String group){
+		groups.add(group);
+	}
+	
+	public void leaveGroup(String group){
+		groups.remove(group);
+	}
+	
+	public boolean isInGroup(String group){
+		return groups.contains(group);
+	}
+	
+	public void parseGroups(String rawGroups){
+		groups = new ArrayList<String>(Arrays.asList(rawGroups.split("\\s*,\\s*")));
+	}
+	
+	public ArrayList<String> getGroups(){
+		return groups;
 	}
 	
 }

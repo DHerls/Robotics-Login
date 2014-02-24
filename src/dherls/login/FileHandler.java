@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -203,5 +204,24 @@ public class FileHandler {
 		return pictureDir;
 	}
 	
+	public static ArrayList<String> getGroups(){
+		ArrayList<String> groups = new ArrayList<>();
+		File groupList = new File(dir.getAbsolutePath() + File.separator + "groups.txt");
+		Scanner groupScan = null;
+		try {
+			groupList.createNewFile();
+			groupScan = new Scanner(groupList);
+			while (groupScan.hasNext()){
+				groups.add(groupScan.nextLine());
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			groupScan.close();
+		}
+		return groups;
+		
+	}
 	
 }

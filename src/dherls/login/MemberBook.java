@@ -45,9 +45,6 @@ public class MemberBook {
 		}
 		
 		importWorkbook();
-		for (int i = 0; i<3;i++){
-			s.autoSizeColumn(i);
-		}
 		write();
 		importWorkbook();
 	}
@@ -80,8 +77,12 @@ public class MemberBook {
 			c = r.createCell(2);
 			c.setCellValue("Current State");
 			c.setCellStyle(style);
+
+			c = r.createCell(3);
+			c.setCellValue("Groups");
+			c.setCellStyle(style);
 			
-			for (int i = 0; i<3; i++){
+			for (int i = 0; i<4; i++){
 				s.autoSizeColumn(i);
 			}
 			
@@ -92,7 +93,7 @@ public class MemberBook {
 	}
 	
 	private static void write(){
-		for (int i = 0; i<3; i++){
+		for (int i = 0; i<4; i++){
 			s.autoSizeColumn(i);
 		}
 		FileOutputStream fileOut = null;
@@ -118,7 +119,7 @@ public class MemberBook {
 		ArrayList<Member> members = new ArrayList<>();
 		for (Row r: s){
 			if (r.getRowNum()>0 && r.getCell(0)!=null){
-				members.add(new Member(r.getCell(0).getStringCellValue().trim(), (int) r.getCell(1).getNumericCellValue() , members.size(),r.getCell(2).getStringCellValue().trim().equalsIgnoreCase("IN") ? true:false));
+				members.add(new Member(r.getCell(0).getStringCellValue().trim(), (int) r.getCell(1).getNumericCellValue() , members.size(),r.getCell(2).getStringCellValue().trim().equalsIgnoreCase("IN") ? true:false, r.getCell(3).getStringCellValue()));
 			}
 			
 		}

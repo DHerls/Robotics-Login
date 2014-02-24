@@ -63,6 +63,7 @@ public class Main {
 		LogBook.init();
 		MemberBook.init();
 		team.importMembers();
+		team.importGroups();
 		frame.visualize();
 	}
 }
